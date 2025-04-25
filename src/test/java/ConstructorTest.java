@@ -3,26 +3,10 @@ import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import pages.ConstructorPage;
 import utils.BrowserFactory;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import static org.junit.Assert.assertTrue;
 
-@RunWith(Parameterized.class)
 public class ConstructorTest {
-    @Parameterized.Parameter
-    public String browser;
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> browsers() {
-        return Arrays.asList(new Object[][]{
-                {"chrome"},
-                {"firefox"}
-        });
-    }
 
     private static WebDriver driver;
     private static ConstructorPage constructorPage;
@@ -30,6 +14,9 @@ public class ConstructorTest {
 
     @Before
     public void setUp() throws Exception {
+        // Читаем название браузера из системного свойства или другого источника конфигурации
+        String browser = System.getProperty("browser", "chrome");
+
         // Создаем драйвер с помощью фабрики браузеров
         driver = BrowserFactory.createDriver(browser);
         driver.manage().window().maximize();

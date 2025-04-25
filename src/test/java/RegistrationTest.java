@@ -1,3 +1,4 @@
+import com.github.javafaker.Faker;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import io.qameta.allure.Step;
@@ -5,25 +6,8 @@ import pages.RegistrationPage;
 import utils.BrowserFactory;
 import user.UserService;
 import model.Credentials;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-@RunWith(Parameterized.class)
 public class RegistrationTest {
-
-    @Parameterized.Parameter
-    public String browser;
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> browsers() {
-        return Arrays.asList(new Object[][]{
-                {"chrome"},
-                {"firefox"}
-        });
-    }
 
     private static WebDriver driver;
     private static RegistrationPage registrationPage;
@@ -31,13 +15,16 @@ public class RegistrationTest {
     private static final String REGISTER_ENDPOINT = "/register";
     private UserService userService;
     private String userAccessToken;
-    private String name = "Alex";
-    private String email = "user-test1209199118@yandex.ru";
+    private Faker faker = new Faker();
+    private String name = faker.name().firstName();
+    private String email = faker.internet().emailAddress();
     private String validPassword = "123456";
     private String invalidPassword = "1234";
 
     @Before
     public void setUp() throws Exception {
+        // Читаем название браузера из системного свойства или другого источника конфигурации
+        String browser = System.getProperty("browser", "chrome");
 
         // Создаем драйвер с помощью фабрики браузеров.
         driver = BrowserFactory.createDriver(browser);
